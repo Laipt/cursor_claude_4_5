@@ -16,8 +16,8 @@
         <el-table-column prop="roleSort" label="排序" width="100" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-              {{ row.status === 1 ? '正常' : '禁用' }}
+            <el-tag :type="statusDict.getTagType(row.status)">
+              {{ statusDict.getLabel(row.status) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -121,9 +121,12 @@ import { ElMessage, ElMessageBox, FormInstance, FormRules } from 'element-plus'
 import type { ElTree } from 'element-plus'
 import { getRoleList, addRole, updateRole, deleteRole } from '@/api/role'
 import { getMenuTree } from '@/api/menu'
-import { Role, RoleQuery, RoleForm } from '@/types/role'
-import { MenuTree } from '@/types/menu'
+import { Role, RoleQuery, RoleForm, MenuTree, Status, DictTypes } from '@admin-system/shared'
 import { requiredRule } from '@/utils/validate'
+import { useDict } from '@/composables/useDict'
+
+// 使用字典
+const statusDict = useDict(DictTypes.ROLE_STATUS)
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -147,7 +150,7 @@ const formData = reactive<RoleForm>({
   roleName: '',
   roleKey: '',
   roleSort: 1,
-  status: 1,
+  status: Status.NORMAL,
   menuIds: [],
   remark: ''
 })

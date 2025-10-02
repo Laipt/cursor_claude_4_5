@@ -3,7 +3,7 @@
   <template v-if="!hasVisibleChildren">
     <!-- 单个菜单项 -->
     <el-menu-item
-      v-if="menu.menuType === 'C' && menu.visible === 1"
+      v-if="menu.menuType === MenuTypeValue.MENU && menu.visible === Visible.VISIBLE"
       :index="fullPath"
     >
       <el-icon v-if="menu.icon">
@@ -18,7 +18,7 @@
   <template v-else>
     <!-- 子菜单 -->
     <el-sub-menu
-      v-if="menu.menuType === 'M' && menu.visible === 1"
+      v-if="menu.menuType === MenuTypeValue.DIRECTORY && menu.visible === Visible.VISIBLE"
       :index="fullPath"
     >
       <template #title>
@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Menu } from '@/types/menu'
+import { Menu, MenuTypeValue, Visible } from '@admin-system/shared'
 
 const props = defineProps<{
   menu: Menu
@@ -71,7 +71,7 @@ const visibleChildren = computed(() => {
   if (!props.menu.children || props.menu.children.length === 0) {
     return []
   }
-  return props.menu.children.filter((child: Menu) => child.menuType !== 'F')
+  return props.menu.children.filter((child: Menu) => child.menuType !== MenuTypeValue.BUTTON)
 })
 
 // 判断是否有可显示的子菜单

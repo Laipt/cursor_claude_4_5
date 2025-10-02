@@ -3,7 +3,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { RouteRecordRaw } from 'vue-router'
-import { Menu } from '@/types/menu'
+import { Menu, MenuTypeValue, Visible } from '@admin-system/shared'
 import { getMenuTree } from '@/api/menu'
 
 // 使用 import.meta.glob 预加载所有视图组件
@@ -55,7 +55,7 @@ export const usePermissionStore = defineStore('permission', () => {
 
     menus.forEach(menu => {
       // 只处理菜单类型，忽略按钮
-      if (menu.menuType === 'C' || menu.menuType === 'M') {
+      if (menu.menuType === MenuTypeValue.MENU || menu.menuType === MenuTypeValue.DIRECTORY) {
         // 如果是子路由，直接创建简单路由
         if (isChild) {
           // 子路由的路径需要去掉父路径前缀
@@ -73,7 +73,7 @@ export const usePermissionStore = defineStore('permission', () => {
             meta: {
               title: menu.menuName,
               icon: menu.icon,
-              hidden: menu.visible === 0,
+              hidden: menu.visible === Visible.HIDDEN,
               permissions: menu.perms ? [menu.perms] : []
             }
           }
@@ -86,7 +86,7 @@ export const usePermissionStore = defineStore('permission', () => {
           routes.push(route)
         } else {
           // 顶级路由，包裹在 Layout 中
-          if (menu.menuType === 'M' || menu.component === 'Layout') {
+          if (menu.menuType === MenuTypeValue.DIRECTORY || menu.component === 'Layout') {
             // 目录类型，Layout + children
             const route: RouteRecordRaw = {
               path: menu.path || '',
@@ -95,7 +95,7 @@ export const usePermissionStore = defineStore('permission', () => {
               meta: {
                 title: menu.menuName,
                 icon: menu.icon,
-                hidden: menu.visible === 0,
+                hidden: menu.visible === Visible.HIDDEN,
                 permissions: menu.perms ? [menu.perms] : []
               }
             }
@@ -119,7 +119,7 @@ export const usePermissionStore = defineStore('permission', () => {
                   meta: {
                     title: menu.menuName,
                     icon: menu.icon,
-                    hidden: menu.visible === 0,
+                    hidden: menu.visible === Visible.HIDDEN,
                     permissions: menu.perms ? [menu.perms] : []
                   }
                 }
@@ -132,7 +132,7 @@ export const usePermissionStore = defineStore('permission', () => {
       }
 
       // 收集按钮权限
-      if (menu.menuType === 'F' && menu.perms) {
+      if (menu.menuType === MenuTypeValue.BUTTON && menu.perms) {
         permissions.value.push(menu.perms)
       }
     })

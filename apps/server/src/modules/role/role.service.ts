@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateRoleDto, UpdateRoleDto, RoleQueryDto } from './dto/role.dto';
-import { Role, PageResult } from '@admin-system/shared';
+import { Role, PageResult, Status } from '@admin-system/shared';
 
 @Injectable()
 export class RoleService {
@@ -57,7 +57,7 @@ export class RoleService {
 
   async findAllRoles(): Promise<Role[]> {
     const roles = await this.prisma.role.findMany({
-      where: { status: 1 },
+      where: { status: Status.NORMAL },
       include: {
         roleMenus: true,
       },

@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@admin-system/shared": "workspace:*",
     "@element-plus/icons-vue": "^2.3.2",
     "axios": "^1.12.2",
     "element-plus": "^2.11.4",

@@ -90,3 +90,13 @@ export function deleteDictData(dictCode: number): Promise<void> {
   })
 }
 
+/**
+ * 根据字典类型获取字典数据（用于下拉选项等）
+ */
+export function getDictDataByType(dictType: string): Promise<DictData[]> {
+  return request({
+    url: `/dict/data/type/${dictType}`,
+    method: 'get'
+  })
+}
+

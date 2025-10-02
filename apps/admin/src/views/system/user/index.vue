@@ -27,8 +27,12 @@
             style="width: 180px"
             @clear="handleQuery"
           >
-            <el-option label="正常" :value="1" />
-            <el-option label="禁用" :value="0" />
+            <el-option 
+              v-for="item in statusDict.options.value"
+              :key="item.value"
+              :label="item.label" 
+              :value="Number(item.value)" 
+            />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -62,8 +66,8 @@
         <el-table-column prop="phone" label="手机号" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-              {{ row.status === 1 ? '正常' : '禁用' }}
+            <el-tag :type="statusDict.getTagType(row.status)">
+              {{ statusDict.getLabel(row.status) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -158,8 +162,13 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="formData.status">
-            <el-radio :value="1">正常</el-radio>
-            <el-radio :value="0">禁用</el-radio>
+            <el-radio 
+              v-for="item in statusDict.options.value"
+              :key="item.value"
+              :value="Number(item.value)"
+            >
+              {{ item.label }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -179,9 +188,13 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, FormInstance, FormRules } from 'element-plus'
 import { getUserList, addUser, updateUser, deleteUser, batchDeleteUser, resetPassword } from '@/api/user'
 import { getAllRoles } from '@/api/role'
-import { User, UserQuery, UserForm } from '@/types/user'
+import { User, UserQuery, UserForm, Status, DictTypes } from '@admin-system/shared'
 import { Role } from '@/types/role'
 import { requiredRule, emailRule, phoneRule, passwordRule, usernameRule } from '@/utils/validate'
+import { useDict } from '@/composables/useDict'
+
+// 使用字典
+const statusDict = useDict(DictTypes.USER_STATUS)
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -207,7 +220,7 @@ const formData = reactive<UserForm>({
   email: '',
   phone: '',
   password: '',
-  status: 1,
+  status: Status.NORMAL,
   roleIds: []
 })
 

@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
-import { User } from '@admin-system/shared';
+import { User, Status } from '@admin-system/shared';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +31,7 @@ export class AuthService {
     }
 
     // 检查用户状态
-    if (user.status === 0) {
+    if (user.status === Status.DISABLED) {
       throw new UnauthorizedException('User account is disabled');
     }
 
@@ -68,19 +68,19 @@ export class AuthService {
 
     // 提取角色信息
     const roles = user.userRoles
-      .filter(ur => ur.role.status === 1)
+      .filter(ur => ur.role.status === Status.NORMAL)
       .map(ur => ur.role.roleName);
 
     const roleIds = user.userRoles
-      .filter(ur => ur.role.status === 1)
+      .filter(ur => ur.role.status === Status.NORMAL)
       .map(ur => ur.role.roleId);
 
     // 提取权限信息
     const permissionsSet = new Set<string>();
     user.userRoles.forEach(ur => {
-      if (ur.role.status === 1) {
+      if (ur.role.status === Status.NORMAL) {
         ur.role.roleMenus.forEach(rm => {
-          if (rm.menu.perms && rm.menu.status === 1) {
+          if (rm.menu.perms && rm.menu.status === Status.NORMAL) {
             permissionsSet.add(rm.menu.perms);
           }
         });

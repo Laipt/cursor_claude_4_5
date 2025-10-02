@@ -3,9 +3,19 @@
   "version": "1.0.0",
   "description": "Shared types and utilities",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "pnpm build:cjs && pnpm build:esm",
+    "build:cjs": "tsc",
+    "build:esm": "tsc --module esnext --outDir dist-esm && node scripts/rename-esm.js",
     "dev": "tsc --watch"
   },
   "keywords": [],

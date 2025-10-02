@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateMenuDto, UpdateMenuDto } from './dto/menu.dto';
-import { Menu, MenuTree } from '@admin-system/shared';
+import { Menu, MenuTree, Status } from '@admin-system/shared';
 
 @Injectable()
 export class MenuService {
@@ -60,22 +60,22 @@ export class MenuService {
 
       // 检查是否是管理员
       const isAdmin = user.userRoles.some(
-        ur => ur.role.roleKey === 'admin' && ur.role.status === 1,
+        ur => ur.role.roleKey === 'admin' && ur.role.status === Status.NORMAL,
       );
 
       if (isAdmin) {
         // 管理员获取所有菜单
         menus = await this.prisma.menu.findMany({
-          where: { status: 1 },
+          where: { status: Status.NORMAL },
           orderBy: { orderNum: 'asc' },
         });
       } else {
         // 普通用户获取授权的菜单
         const menuIds = new Set<number>();
         user.userRoles.forEach(ur => {
-          if (ur.role.status === 1) {
+          if (ur.role.status === Status.NORMAL) {
             ur.role.roleMenus.forEach(rm => {
-              if (rm.menu.status === 1) {
+              if (rm.menu.status === Status.NORMAL) {
                 menuIds.add(rm.menuId);
               }
             });
@@ -85,7 +85,7 @@ export class MenuService {
         menus = await this.prisma.menu.findMany({
           where: {
             menuId: { in: Array.from(menuIds) },
-            status: 1,
+            status: Status.NORMAL,
           },
           orderBy: { orderNum: 'asc' },
         });

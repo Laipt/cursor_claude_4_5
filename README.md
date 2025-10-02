@@ -383,6 +383,17 @@ pnpm install
 
 欢迎提交 Issue 和 Pull Request！
 
+## 📚 文档
+
+详细的项目文档请查看 [docs](./docs/) 目录：
+
+- **[数据库初始化说明](./docs/DATABASE_INITIALIZATION.md)** - 数据库初始化和字典数据详情 ⭐ 新手必读
+- **[字典API集成说明](./docs/DICT_API_INTEGRATION.md)** - 字典系统的使用和缓存机制
+- **[实施总结](./docs/IMPLEMENTATION_SUMMARY.md)** - 项目实施的完整总结
+- **[Shared包集成说明](./docs/SHARED_INTEGRATION.md)** - 前后端类型共享方案
+
+更多文档请访问 [docs/README.md](./docs/README.md)
+
 ## License
 
 MIT

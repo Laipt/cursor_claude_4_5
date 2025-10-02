@@ -8,7 +8,7 @@ import {
   UpdateDictDataDto,
   DictDataQueryDto,
 } from './dto/dict.dto';
-import { Dict, DictData, PageResult } from '@admin-system/shared';
+import { Dict, DictData, PageResult, Status } from '@admin-system/shared';
 
 @Injectable()
 export class DictService {
@@ -251,6 +251,32 @@ export class DictService {
     await this.prisma.dictData.delete({
       where: { dictCode },
     });
+  }
+
+  // 根据字典类型获取字典数据（用于前端下拉选项等）
+  async getDictDataByType(dictType: string): Promise<DictData[]> {
+    const dictDataList = await this.prisma.dictData.findMany({
+      where: {
+        dictType,
+        status: Status.NORMAL, // 只返回正常状态的字典数据
+      },
+      orderBy: { dictSort: 'asc' },
+    });
+
+    return dictDataList.map(data => ({
+      dictCode: data.dictCode,
+      dictSort: data.dictSort,
+      dictLabel: data.dictLabel,
+      dictValue: data.dictValue,
+      dictType: data.dictType,
+      cssClass: data.cssClass,
+      listClass: data.listClass,
+      isDefault: data.isDefault,
+      status: data.status,
+      remark: data.remark,
+      createTime: data.createTime.toISOString(),
+      updateTime: data.updateTime.toISOString(),
+    }));
   }
 }
 

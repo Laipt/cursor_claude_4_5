@@ -2,6 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@
 import { Reflector } from '@nestjs/core';
 import { PERMISSIONS_KEY } from '../../common/decorators/permissions.decorator';
 import { PrismaService } from '../../prisma/prisma.service';
+import { Status } from '@admin-system/shared';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
@@ -53,7 +54,7 @@ export class PermissionsGuard implements CanActivate {
 
     // 检查是否是管理员
     const isAdmin = userWithRoles.userRoles.some(
-      ur => ur.role.roleKey === 'admin' && ur.role.status === 1,
+      ur => ur.role.roleKey === 'admin' && ur.role.status === Status.NORMAL,
     );
 
     if (isAdmin) {
@@ -63,9 +64,9 @@ export class PermissionsGuard implements CanActivate {
     // 收集用户的所有权限
     const userPermissions = new Set<string>();
     userWithRoles.userRoles.forEach(ur => {
-      if (ur.role.status === 1) {
+      if (ur.role.status === Status.NORMAL) {
         ur.role.roleMenus.forEach(rm => {
-          if (rm.menu.perms && rm.menu.status === 1) {
+          if (rm.menu.perms && rm.menu.status === Status.NORMAL) {
             userPermissions.add(rm.menu.perms);
           }
         });

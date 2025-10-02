@@ -56,6 +56,12 @@ export class DictController {
     return this.dictService.findAllDictData(query);
   }
 
+  // 根据字典类型获取字典数据（公开接口，用于前端获取字典选项）
+  @Get('data/type/:dictType')
+  getDictDataByType(@Param('dictType') dictType: string) {
+    return this.dictService.getDictDataByType(dictType);
+  }
+
   @Post('data')
   @RequirePermissions('system:dict:add')
   createDictData(@Body() createDictDataDto: CreateDictDataDto) {

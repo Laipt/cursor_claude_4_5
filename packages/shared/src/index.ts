@@ -6,3 +6,6 @@ export * from './types/menu'
 export * from './types/dict'
 export * from './types/config'
 
+// 导出常量
+export * from './constants'
+

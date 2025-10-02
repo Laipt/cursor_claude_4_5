@@ -47,8 +47,8 @@
               </el-tag>
             </el-descriptions-item>
             <el-descriptions-item label="状态">
-              <el-tag :type="userInfo?.status === 1 ? 'success' : 'danger'">
-                {{ userInfo?.status === 1 ? '正常' : '禁用' }}
+              <el-tag :type="statusDict.getTagType(userInfo?.status || 0)">
+                {{ statusDict.getLabel(userInfo?.status || 0) }}
               </el-tag>
             </el-descriptions-item>
           </el-descriptions>
@@ -74,8 +74,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { DictTypes } from '@admin-system/shared'
+import { useDict } from '@/composables/useDict'
 
 const userStore = useUserStore()
 const userInfo = computed(() => userStore.userInfo)
+
+// 使用字典
+const statusDict = useDict(DictTypes.USER_STATUS)
 </script>
 

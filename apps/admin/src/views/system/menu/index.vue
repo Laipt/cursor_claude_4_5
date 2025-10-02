@@ -24,9 +24,9 @@
         </el-table-column>
         <el-table-column prop="menuType" label="类型" width="100">
           <template #default="{ row }">
-            <el-tag v-if="row.menuType === 'M'" type="warning">目录</el-tag>
-            <el-tag v-else-if="row.menuType === 'C'">菜单</el-tag>
-            <el-tag v-else type="info">按钮</el-tag>
+            <el-tag :type="menuTypeDict.getTagType(row.menuType)">
+              {{ menuTypeDict.getLabel(row.menuType) }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="orderNum" label="排序" width="80" />
@@ -35,8 +35,8 @@
         <el-table-column prop="perms" label="权限标识" />
         <el-table-column prop="status" label="状态" width="100">
           <template #default="{ row }">
-            <el-tag :type="row.status === 1 ? 'success' : 'danger'">
-              {{ row.status === 1 ? '正常' : '禁用' }}
+            <el-tag :type="statusDict.getTagType(row.status)">
+              {{ statusDict.getLabel(row.status) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -130,8 +130,13 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, FormInstance, FormRules } from 'element-plus'
 import { getMenuTree, addMenu, updateMenu, deleteMenu } from '@/api/menu'
-import { Menu, MenuForm, MenuType } from '@/types/menu'
+import { Menu, MenuForm, MenuType, MenuTypeValue, Status, Visible, DictTypes } from '@admin-system/shared'
 import { requiredRule } from '@/utils/validate'
+import { useDict } from '@/composables/useDict'
+
+// 使用字典
+const menuTypeDict = useDict(DictTypes.MENU_TYPE)
+const statusDict = useDict(DictTypes.MENU_STATUS)
 
 const loading = ref(false)
 const dialogVisible = ref(false)
@@ -147,8 +152,8 @@ const formData = reactive<MenuForm>({
   path: '',
   component: '',
   menuType: MenuType.MENU,
-  visible: 1,
-  status: 1,
+  visible: Visible.VISIBLE,
+  status: Status.NORMAL,
   perms: '',
   icon: ''
 })
