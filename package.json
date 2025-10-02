@@ -1,0 +1,21 @@
+{
+  "name": "admin-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Admin System with NestJS Backend and Vue Frontend",
+  "scripts": {
+    "dev:admin": "pnpm --filter admin dev",
+    "dev:server": "pnpm --filter server dev",
+    "build:admin": "pnpm --filter admin build",
+    "build:server": "pnpm --filter server build",
+    "dev": "pnpm --parallel --filter admin --filter server dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}
+
