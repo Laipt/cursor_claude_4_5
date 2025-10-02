@@ -20,6 +20,7 @@
         active-text-color="#409EFF"
         :collapse-transition="false"
         router
+        style="border-right: none;"
       >
         <MenuItem
           v-for="menu in menuTree"
