@@ -12,16 +12,17 @@ datasource db {
 
 // 用户表
 model User {
-  userId     Int        @id @default(autoincrement())
-  username   String     @unique @db.VarChar(50)
-  password   String     @db.VarChar(255)
-  nickname   String     @db.VarChar(50)
-  email      String?    @db.VarChar(100)
-  phone      String?    @db.VarChar(20)
-  avatar     String?    @db.VarChar(255)
-  status     Int        @default(1) @db.TinyInt // 0:禁用 1:正常
-  createTime DateTime   @default(now()) @map("create_time")
-  updateTime DateTime   @updatedAt @map("update_time")
+  userId           Int        @id @default(autoincrement())
+  username         String     @unique @db.VarChar(50)
+  password         String     @db.VarChar(255)
+  nickname         String     @db.VarChar(50)
+  email            String?    @db.VarChar(100)
+  phone            String?    @db.VarChar(20)
+  avatar           String?    @db.VarChar(255)
+  status           Int        @default(1) @db.TinyInt // 0:禁用 1:正常
+  passwordChangedAt DateTime?  @map("password_changed_at") // 密码修改时间
+  createTime       DateTime   @default(now()) @map("create_time")
+  updateTime       DateTime   @updatedAt @map("update_time")
   
   userRoles  UserRole[]
   

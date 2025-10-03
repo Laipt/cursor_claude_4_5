@@ -113,6 +113,7 @@ export class UserService {
       data: {
         username,
         password: hashedPassword,
+        passwordChangedAt: new Date(), // 记录密码创建时间
         ...rest,
         userRoles: {
           create: roleIds.map(roleId => ({ roleId })),
@@ -232,9 +233,13 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(resetPasswordDto.password, 10);
 
+    // 更新密码并记录修改时间，使旧 token 失效
     await this.prisma.user.update({
       where: { userId },
-      data: { password: hashedPassword },
+      data: { 
+        password: hashedPassword,
+        passwordChangedAt: new Date(),
+      },
     });
   }
 }

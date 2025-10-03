@@ -328,13 +328,13 @@ const handleBatchDelete = async () => {
 // 重置密码
 const handleResetPassword = async (row: User) => {
   try {
-    await ElMessageBox.prompt('请输入新密码', '重置密码', {
+    const { value } = await ElMessageBox.prompt('请输入新密码', '重置密码', {
       inputPattern: /.{6,20}/,
       inputErrorMessage: '密码长度为6-20位'
     })
 
-    await resetPassword(row.userId, '123456')
-    ElMessage.success('密码已重置为: 123456')
+    await resetPassword(row.userId, value)
+    ElMessage.success('密码已重置为: ' + value)
   } catch (error) {
     // 取消
   }
