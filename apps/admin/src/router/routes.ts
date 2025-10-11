@@ -30,6 +30,24 @@ export const constantRoutes: RouteRecordRaw[] = [
     ]
   },
   {
+    path: '/user',
+    component: () => import('@/layouts/Layout.vue'),
+    meta: {
+      hidden: true
+    },
+    children: [
+      {
+        path: 'profile',
+        name: 'UserProfile',
+        component: () => import('@/views/user/index.vue'),
+        meta: {
+          title: '个人中心',
+          hidden: true
+        }
+      }
+    ]
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/error/404.vue'),

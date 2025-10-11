@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateUserDto, UpdateUserDto, UserQueryDto, ResetPasswordDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto, UserQueryDto, ResetPasswordDto, UpdateProfileDto, ChangePasswordDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { User, PageResult } from '@kk/shared';
 
@@ -237,6 +237,70 @@ export class UserService {
     await this.prisma.user.update({
       where: { userId },
       data: { 
+        password: hashedPassword,
+        passwordChangedAt: new Date(),
+      },
+    });
+  }
+
+  async updateProfile(userId: number, updateProfileDto: UpdateProfileDto): Promise<User> {
+    const user = await this.prisma.user.findUnique({
+      where: { userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { userId },
+      data: updateProfileDto,
+      include: {
+        userRoles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
+
+    return {
+      userId: updatedUser.userId,
+      username: updatedUser.username,
+      nickname: updatedUser.nickname,
+      email: updatedUser.email,
+      phone: updatedUser.phone,
+      avatar: updatedUser.avatar,
+      status: updatedUser.status,
+      roleIds: updatedUser.userRoles.map(ur => ur.roleId),
+      roles: updatedUser.userRoles.map(ur => ur.role.roleName),
+      createTime: updatedUser.createTime.toISOString(),
+      updateTime: updatedUser.updateTime.toISOString(),
+    };
+  }
+
+  async changePassword(userId: number, changePasswordDto: ChangePasswordDto): Promise<void> {
+    const user = await this.prisma.user.findUnique({
+      where: { userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // 验证旧密码
+    const isPasswordValid = await bcrypt.compare(changePasswordDto.oldPassword, user.password);
+    if (!isPasswordValid) {
+      throw new BadRequestException('旧密码错误');
+    }
+
+    // 加密新密码
+    const hashedPassword = await bcrypt.hash(changePasswordDto.newPassword, 10);
+
+    // 更新密码并记录修改时间，使旧 token 失效
+    await this.prisma.user.update({
+      where: { userId },
+      data: {
         password: hashedPassword,
         passwordChangedAt: new Date(),
       },

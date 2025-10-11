@@ -10,8 +10,9 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, UserQueryDto, ResetPasswordDto, BatchDeleteDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto, UserQueryDto, ResetPasswordDto, BatchDeleteDto, UpdateProfileDto, ChangePasswordDto } from './dto/user.dto';
 import { RequirePermissions } from '../../common/decorators/permissions.decorator';
+import { CurrentUser, JwtPayload } from '../../common/decorators/current-user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -33,6 +34,16 @@ export class UserController {
   @RequirePermissions('system:user:add')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
+  }
+
+  @Put('profile')
+  updateProfile(@CurrentUser() user: JwtPayload, @Body() updateProfileDto: UpdateProfileDto) {
+    return this.userService.updateProfile(user.userId, updateProfileDto);
+  }
+
+  @Put('password')
+  changePassword(@CurrentUser() user: JwtPayload, @Body() changePasswordDto: ChangePasswordDto) {
+    return this.userService.changePassword(user.userId, changePasswordDto);
   }
 
   @Put(':id')

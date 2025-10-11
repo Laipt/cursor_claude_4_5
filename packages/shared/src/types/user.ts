@@ -44,3 +44,18 @@ export interface PasswordForm {
   newPassword: string
 }
 
+// 个人资料表单
+export interface ProfileForm {
+  nickname: string
+  email?: string
+  phone?: string
+  avatar?: string
+}
+
+// 修改密码表单
+export interface ChangePasswordForm {
+  oldPassword: string
+  newPassword: string
+  confirmPassword: string
+}
+

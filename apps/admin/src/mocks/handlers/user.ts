@@ -162,6 +162,61 @@ export const userHandlers = [
       message: '用户不存在',
       data: null
     }, { status: 404 })
+  }),
+
+  // 更新个人资料
+  http.put(`${baseURL}/user/profile`, async ({ request }) => {
+    const body = await request.json() as any
+    const token = request.headers.get('Authorization')
+    
+    // 模拟从 token 获取当前用户 ID (实际应该解析 JWT)
+    // 这里假设是用户 1
+    const currentUserId = 1
+    const index = users.findIndex(u => u.userId === currentUserId)
+
+    if (index !== -1) {
+      users[index] = { 
+        ...users[index], 
+        ...body, 
+        updateTime: new Date().toISOString() 
+      }
+      return HttpResponse.json({
+        code: 200,
+        message: '个人资料更新成功',
+        data: users[index]
+      })
+    }
+
+    return HttpResponse.json({
+      code: 404,
+      message: '用户不存在',
+      data: null
+    }, { status: 404 })
+  }),
+
+  // 修改密码
+  http.put(`${baseURL}/user/password`, async ({ request }) => {
+    const body = await request.json() as { oldPassword: string, newPassword: string }
+    const token = request.headers.get('Authorization')
+    
+    // 模拟从 token 获取当前用户 ID
+    const currentUserId = 1
+    const user = users.find(u => u.userId === currentUserId)
+
+    if (user) {
+      // 这里简化处理，实际应该验证 oldPassword
+      return HttpResponse.json({
+        code: 200,
+        message: '密码修改成功',
+        data: null
+      })
+    }
+
+    return HttpResponse.json({
+      code: 404,
+      message: '用户不存在',
+      data: null
+    }, { status: 404 })
   })
 ]
 

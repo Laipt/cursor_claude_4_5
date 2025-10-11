@@ -1,7 +1,7 @@
 // 用户API
 
 import request from '@/utils/request'
-import type { User, UserQuery, UserForm, PageResult } from '@kk/shared'
+import type { User, UserQuery, UserForm, PageResult, ProfileForm, ChangePasswordForm } from '@kk/shared'
 import { toastSuccess } from './common'
 
 /**
@@ -81,5 +81,27 @@ export function resetPassword(userId: number, password: string): Promise<void> {
     url: `/user/${userId}/password`,
     method: 'put',
     data: { password },
+  }).then(toastSuccess)
+}
+
+/**
+ * 更新个人资料
+ */
+export function updateProfile(data: ProfileForm): Promise<User> {
+  return request({
+    url: '/user/profile',
+    method: 'put',
+    data,
+  }).then(toastSuccess)
+}
+
+/**
+ * 修改密码
+ */
+export function changePassword(data: ChangePasswordForm): Promise<void> {
+  return request({
+    url: '/user/password',
+    method: 'put',
+    data,
   }).then(toastSuccess)
 }

@@ -92,3 +92,32 @@ export class BatchDeleteDto {
   userIds: number[];
 }
 
+export class UpdateProfileDto {
+  @IsString()
+  @IsNotEmpty()
+  nickname: string;
+
+  @IsEmail()
+  @IsOptional()
+  email?: string;
+
+  @IsString()
+  @IsOptional()
+  phone?: string;
+
+  @IsString()
+  @IsOptional()
+  avatar?: string;
+}
+
+export class ChangePasswordDto {
+  @IsString()
+  @IsNotEmpty()
+  oldPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(6)
+  newPassword: string;
+}
+
