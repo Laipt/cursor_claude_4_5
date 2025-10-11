@@ -1,6 +1,7 @@
 // Axios封装
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import axios from 'axios'
+import type { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
 import { getToken, removeToken } from './auth'
 import router from '@/router'
@@ -34,28 +35,28 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: AxiosResponse) => {
     const res = response.data
-    
+
     // 如果返回的状态码不是200，则认为是错误
     if (res.code !== 200) {
       ElMessage.error(res.message || '请求失败')
-      
+
       // 401: 未登录或token过期
       if (res.code === 401) {
         removeToken()
         router.push('/login')
       }
-      
+
       return Promise.reject(new Error(res.message || '请求失败'))
     }
-    
+
     return res.data
   },
   (error) => {
     console.error('Response error:', error)
-    
+
     if (error.response) {
       const { status, data } = error.response
-      
+
       switch (status) {
         case 401:
           ElMessage.error('未授权，请重新登录')
@@ -77,7 +78,7 @@ service.interceptors.response.use(
     } else {
       ElMessage.error('网络连接异常')
     }
-    
+
     return Promise.reject(error)
   }
 )

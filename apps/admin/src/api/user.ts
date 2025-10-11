@@ -1,8 +1,8 @@
 // 用户API
 
 import request from '@/utils/request'
-import { User, UserQuery, UserForm } from '@/types/user'
-import { PageResult } from '@/types/common'
+import type { User, UserQuery, UserForm, PageResult } from '@kk/shared'
+import { toastSuccess } from './common'
 
 /**
  * 用户列表
@@ -11,7 +11,7 @@ export function getUserList(params: UserQuery): Promise<PageResult<User>> {
   return request({
     url: '/user/list',
     method: 'get',
-    params
+    params,
   })
 }
 
@@ -21,7 +21,7 @@ export function getUserList(params: UserQuery): Promise<PageResult<User>> {
 export function getUser(userId: number): Promise<User> {
   return request({
     url: `/user/${userId}`,
-    method: 'get'
+    method: 'get',
   })
 }
 
@@ -32,19 +32,24 @@ export function addUser(data: UserForm): Promise<User> {
   return request({
     url: '/user',
     method: 'post',
-    data
+    data,
   })
 }
 
 /**
  * 更新用户
  */
-export function updateUser(userId: number, data: UserForm): Promise<User> {
-  return request({
-    url: `/user/${userId}`,
-    method: 'put',
-    data
-  })
+export function updateUser(params: UserForm): Promise<User> {
+  const { userId, ...data } = params
+  return (
+    userId
+      ? request({
+          url: `/user/${userId}`,
+          method: 'put',
+          data,
+        })
+      : addUser(params)
+  ).then(toastSuccess)
 }
 
 /**
@@ -53,8 +58,8 @@ export function updateUser(userId: number, data: UserForm): Promise<User> {
 export function deleteUser(userId: number): Promise<void> {
   return request({
     url: `/user/${userId}`,
-    method: 'delete'
-  })
+    method: 'delete',
+  }).then(toastSuccess)
 }
 
 /**
@@ -64,7 +69,7 @@ export function batchDeleteUser(userIds: number[]): Promise<void> {
   return request({
     url: '/user/batch',
     method: 'delete',
-    data: { userIds }
+    data: { userIds },
   })
 }
 
@@ -75,7 +80,6 @@ export function resetPassword(userId: number, password: string): Promise<void> {
   return request({
     url: `/user/${userId}/password`,
     method: 'put',
-    data: { password }
-  })
+    data: { password },
+  }).then(toastSuccess)
 }
-

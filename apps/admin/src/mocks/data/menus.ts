@@ -1,6 +1,6 @@
 // 菜单 Mock 数据
 
-import type { Menu, MenuType } from '@/types/menu'
+import type { Menu, MenuType } from '@kk/shared'
 
 export const menus: Menu[] = [
   // 首页

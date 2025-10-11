@@ -2,8 +2,7 @@
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { User } from '@/types/user'
-import { LoginForm } from '@/types/common'
+import type { User, LoginForm } from '@kk/shared'
 import { login, getUserInfo, logout } from '@/api/auth'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 

@@ -1,6 +1,6 @@
 // 字典 Mock 数据
 
-import type { Dict, DictData } from '@/types/dict'
+import type { Dict, DictData } from '@kk/shared'
 
 export const dicts: Dict[] = [
   {

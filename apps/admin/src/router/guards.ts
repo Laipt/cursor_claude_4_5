@@ -1,6 +1,6 @@
 // 路由守卫
 
-import { Router } from 'vue-router'
+import type { Router } from 'vue-router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { useUserStore } from '@/stores/user'
@@ -29,7 +29,7 @@ export function setupRouterGuards(router: Router) {
         try {
           // 检查是否已获取用户信息
           const hasUserInfo = userStore.userInfo && userStore.userInfo.userId
-          
+
           // 如果没有用户信息，先获取
           if (!hasUserInfo) {
             await userStore.getUserInfoAction()

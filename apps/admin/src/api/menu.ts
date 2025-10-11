@@ -1,7 +1,8 @@
 // 菜单API
 
 import request from '@/utils/request'
-import { Menu, MenuForm, MenuTree } from '@/types/menu'
+import type { Menu, MenuForm, MenuTree } from '@kk/shared'
+import { toastSuccess } from './common'
 
 /**
  * 获取菜单树
@@ -47,12 +48,12 @@ export function addMenu(data: MenuForm): Promise<Menu> {
 /**
  * 更新菜单
  */
-export function updateMenu(menuId: number, data: MenuForm): Promise<Menu> {
-  return request({
+export function updateMenu({menuId, ...data}): Promise<Menu> {
+  return (menuId ? request({
     url: `/menu/${menuId}`,
     method: 'put',
     data
-  })
+  }) : addMenu(data as any)).then(toastSuccess)
 }
 
 /**

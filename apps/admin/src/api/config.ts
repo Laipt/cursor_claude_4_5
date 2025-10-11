@@ -1,8 +1,8 @@
 // 配置API
 
 import request from '@/utils/request'
-import { Config, ConfigQuery, ConfigForm } from '@/types/config'
-import { PageResult } from '@/types/common'
+import type { Config, ConfigQuery, ConfigForm, PageResult } from '@kk/shared'
+import { toastSuccess } from './common'
 
 /**
  * 配置列表
@@ -11,7 +11,7 @@ export function getConfigList(params: ConfigQuery): Promise<PageResult<Config>> 
   return request({
     url: '/config/list',
     method: 'get',
-    params
+    params,
   })
 }
 
@@ -21,7 +21,7 @@ export function getConfigList(params: ConfigQuery): Promise<PageResult<Config>> 
 export function getConfig(configId: number): Promise<Config> {
   return request({
     url: `/config/${configId}`,
-    method: 'get'
+    method: 'get',
   })
 }
 
@@ -32,19 +32,23 @@ export function addConfig(data: ConfigForm): Promise<Config> {
   return request({
     url: '/config',
     method: 'post',
-    data
+    data,
   })
 }
 
 /**
  * 更新配置
  */
-export function updateConfig(configId: number, data: ConfigForm): Promise<Config> {
-  return request({
-    url: `/config/${configId}`,
-    method: 'put',
-    data
-  })
+export function updateConfig({ configId, ...data }: ConfigForm): Promise<Config> {
+  return (
+    configId
+      ? request({
+          url: `/config/${configId}`,
+          method: 'put',
+          data,
+        })
+      : addConfig(data)
+  ).then(toastSuccess)
 }
 
 /**
@@ -53,7 +57,6 @@ export function updateConfig(configId: number, data: ConfigForm): Promise<Config
 export function deleteConfig(configId: number): Promise<void> {
   return request({
     url: `/config/${configId}`,
-    method: 'delete'
+    method: 'delete',
   })
 }
-

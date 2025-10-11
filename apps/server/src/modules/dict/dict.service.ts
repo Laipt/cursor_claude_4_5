@@ -8,7 +8,7 @@ import {
   UpdateDictDataDto,
   DictDataQueryDto,
 } from './dto/dict.dto';
-import { Dict, DictData, PageResult, Status } from '@admin-system/shared';
+import { Dict, DictData, PageResult, Status } from '@kk/shared';
 
 @Injectable()
 export class DictService {

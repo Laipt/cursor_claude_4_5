@@ -1,6 +1,6 @@
 // 配置 Mock 数据
 
-import type { Config } from '@/types/config'
+import type { Config } from '@kk/shared'
 
 export const configs: Config[] = [
   {

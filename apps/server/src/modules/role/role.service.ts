@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateRoleDto, UpdateRoleDto, RoleQueryDto } from './dto/role.dto';
-import { Role, PageResult, Status } from '@admin-system/shared';
+import { Role, PageResult, Status } from '@kk/shared';
 
 @Injectable()
 export class RoleService {

@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateConfigDto, UpdateConfigDto, ConfigQueryDto } from './dto/config.dto';
-import { Config, PageResult } from '@admin-system/shared';
+import { Config, PageResult } from '@kk/shared';
 
 @Injectable()
 export class ConfigService {

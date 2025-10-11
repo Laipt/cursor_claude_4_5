@@ -1,109 +1,52 @@
 <template>
-  <div class="h-screen w-screen flex-center bg-gradient-to-br from-blue-400 to-purple-500">
-    <el-card class="w-96 shadow-xl">
-      <template #header>
-        <div class="text-center">
-          <h1 class="text-2xl font-bold">后台管理系统</h1>
-          <p class="text-sm text-gray-500 mt-2">欢迎登录</p>
-        </div>
-      </template>
-
-      <el-form
-        ref="loginFormRef"
-        :model="loginForm"
-        :rules="loginRules"
-        @keyup.enter="handleLogin"
-      >
-        <el-form-item prop="username">
-          <el-input
-            v-model="loginForm.username"
-            placeholder="请输入用户名"
-            prefix-icon="User"
-            size="large"
-          />
-        </el-form-item>
-
-        <el-form-item prop="password">
-          <el-input
-            v-model="loginForm.password"
-            type="password"
-            placeholder="请输入密码"
-            prefix-icon="Lock"
-            size="large"
-            show-password
-          />
-        </el-form-item>
-
-        <el-form-item>
-          <el-button
-            type="primary"
-            size="large"
-            class="w-full"
-            :loading="loading"
-            @click="handleLogin"
-          >
-            登录
-          </el-button>
-        </el-form-item>
-      </el-form>
-
-      <div class="text-center text-sm text-gray-500 mt-4">
-        <p>提示: admin/admin123 或 user/user123</p>
+  <div class="login flex">
+    <div class="m-auto">
+      <div class="text-center mb-20px">
+        <img src="/vite.svg" class="w-50px h-50px mb-10px" />
+        <div class="text-20px font-bold mb-5px">{{ appName }}</div>
+        <div class="text-14px text-bluegray">欢迎来到{{ appName }}</div>
       </div>
-    </el-card>
+      <div class="bg-white rd-xl shadow-2xl py-40px px-20px w-350px">
+        <k-form label-position="top">
+          <k-input label="用户名" prop="username" required @keyup.enter="handleLogin" />
+          <k-input label="密码" prop="password" show-password required @keyup.enter="handleLogin" />
+          <el-button type="primary" class="w-full mt-10px" :loading="loading" @click="handleLogin">登录</el-button>
+        </k-form>
+      </div>
+      <div class="text-center text-12px text-coolgray mt-30px">
+        <div>© 2025 {{ appName }} v2.1.0</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { ElMessage, FormInstance, FormRules } from 'element-plus'
-import { useUserStore } from '@/stores/user'
-import { LoginForm } from '@/types/common'
+const { KForm, validate, loading } = useForm({
+  defaultValues: {
+    username: 'admin',
+    password: 'admin123',
+  },
+})
+
+const appName = import.meta.env.VITE_APP_NAME
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 
-const loginFormRef = ref<FormInstance>()
-const loading = ref(false)
-
-const loginForm = reactive<LoginForm>({
-  username: 'admin',
-  password: 'admin123'
-})
-
-const loginRules: FormRules = {
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' },
-    { min: 4, max: 20, message: '用户名长度为4-20位', trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, max: 20, message: '密码长度为6-20位', trigger: 'blur' }
-  ]
-}
-
 const handleLogin = async () => {
-  if (!loginFormRef.value) return
-
-  await loginFormRef.value.validate(async (valid) => {
-    if (valid) {
-      loading.value = true
-      try {
-        await userStore.loginAction(loginForm)
-        ElMessage.success('登录成功')
-        
-        // 跳转到重定向地址或首页
-        const redirect = (route.query.redirect as string) || '/'
-        router.push(redirect)
-      } catch (error) {
-        console.error('登录失败:', error)
-      } finally {
-        loading.value = false
-      }
-    }
-  })
+  await validate(userStore.loginAction)
+  // 跳转到重定向地址或首页
+  const redirect = (route.query.redirect as string) || '/'
+  router.push(redirect)
 }
 </script>
 
+<style lang="scss" scoped>
+.login {
+  width: 100vw;
+  height: 100vh;
+  background-image: url(./img/bg.jpg);
+  background-size: cover;
+}
+</style>

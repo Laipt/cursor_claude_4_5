@@ -1,6 +1,6 @@
 # Shared包集成说明
 
-本文档说明如何将 `@admin-system/shared` 包应用到前后端项目中，统一字典值和类型定义。
+本文档说明如何将 `@kk/shared` 包应用到前后端项目中，统一字典值和类型定义。
 
 ## 📋 已完成的工作
 
@@ -59,7 +59,7 @@ if (menu.menuType === 'C') { }
 **现在：**
 ```typescript
 // 语义清晰的常量
-import { Status, Visible, MenuTypeValue } from '@admin-system/shared'
+import { Status, Visible, MenuTypeValue } from '@kk/shared'
 
 if (user.status === Status.NORMAL) { }
 if (menu.visible === Visible.HIDDEN) { }
@@ -157,7 +157,7 @@ import {
   StatusLabel, 
   getStatusLabel, 
   getStatusTagType 
-} from '@admin-system/shared'
+} from '@kk/shared'
 </script>
 ```
 
@@ -165,7 +165,7 @@ import {
 
 ```typescript
 import { Injectable } from '@nestjs/common'
-import { Status, MenuTypeValue } from '@admin-system/shared'
+import { Status, MenuTypeValue } from '@kk/shared'
 
 @Injectable()
 export class MenuService {
@@ -183,7 +183,7 @@ export class MenuService {
 ### 数据库种子文件
 
 ```typescript
-import { Status, Visible, MenuTypeValue } from '@admin-system/shared'
+import { Status, Visible, MenuTypeValue } from '@kk/shared'
 
 const menus = [
   {
@@ -231,7 +231,7 @@ package.json 配置：
 
 ### 1. 安装依赖
 ```bash
-pnpm add @admin-system/shared@workspace:*
+pnpm add @kk/shared@workspace:*
 ```
 
 ### 2. 查找硬编码值
@@ -247,7 +247,7 @@ grep -r "menuType.*==.*'[MCF]'" src/
 // 之前
 if (user.status === 1)
 // 之后
-import { Status } from '@admin-system/shared'
+import { Status } from '@kk/shared'
 if (user.status === Status.NORMAL)
 ```
 
@@ -257,7 +257,7 @@ if (user.status === Status.NORMAL)
 {{ row.status === 1 ? '正常' : '禁用' }}
 
 // 之后
-import { getStatusLabel } from '@admin-system/shared'
+import { getStatusLabel } from '@kk/shared'
 {{ getStatusLabel(row.status) }}
 ```
 
@@ -293,7 +293,7 @@ import { getStatusLabel } from '@admin-system/shared'
 
 3. **版本管理**：使用workspace协议确保前后端使用同一版本
    ```json
-   "@admin-system/shared": "workspace:*"
+   "@kk/shared": "workspace:*"
    ```
 
 ## 🎉 完成状态

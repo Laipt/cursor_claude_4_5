@@ -2,8 +2,8 @@
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { RouteRecordRaw } from 'vue-router'
-import { Menu, MenuTypeValue, Visible } from '@admin-system/shared'
+import type { RouteRecordRaw } from 'vue-router'
+import { type Menu, type MenuTree, MenuTypeValue, Visible } from '@kk/shared'
 import { getMenuTree } from '@/api/menu'
 
 // 使用 import.meta.glob 预加载所有视图组件
@@ -23,12 +23,12 @@ export const usePermissionStore = defineStore('permission', () => {
     const cleanComponent = component?.startsWith('/') ? component.slice(1) : component
     const path = `../views/${cleanComponent}.vue`
     const module = modules[path]
-    
+
     if (!module) {
       console.error(`组件不存在: ${path}`)
-      return () => import('@/views/404.vue')
+      return () => import('@/views/error/404.vue')
     }
-    
+
     return module
   }
 
@@ -38,7 +38,7 @@ export const usePermissionStore = defineStore('permission', () => {
   async function generateRoutes() {
     try {
       const menuTree = await getMenuTree()
-      menus.value = menuTree
+      menus.value = generateMenusPath(menuTree, '')
       routes.value = generateRoutesFromMenus(menuTree)
       isRoutesGenerated.value = true
       return routes.value
@@ -47,13 +47,26 @@ export const usePermissionStore = defineStore('permission', () => {
     }
   }
 
+  function generateMenusPath(menus: MenuTree[], parentPath: string) {
+    return menus.map((menu) => {
+      if (menu.menuType === MenuTypeValue.BUTTON) return menu
+      if (menu.path && !menu.path?.startsWith('/')) {
+        menu.path = `${parentPath}/${menu.path}`
+      }
+      if (menu.children?.length) {
+        menu.children = generateMenusPath(menu.children, menu.path ?? '')
+      }
+      return menu
+    })
+  }
+
   /**
    * 从菜单生成路由
    */
   function generateRoutesFromMenus(menus: Menu[], isChild: boolean = false): any[] {
     const routes: any[] = []
 
-    menus.forEach(menu => {
+    menus.forEach((menu) => {
       // 只处理菜单类型，忽略按钮
       if (menu.menuType === MenuTypeValue.MENU || menu.menuType === MenuTypeValue.DIRECTORY) {
         // 如果是子路由，直接创建简单路由
@@ -69,18 +82,18 @@ export const usePermissionStore = defineStore('permission', () => {
           const route: RouteRecordRaw = {
             path: childPath,
             name: menu.menuName,
-            component: loadComponent(menu.component),
+            component: loadComponent(menu.component!),
             meta: {
               title: menu.menuName,
               icon: menu.icon,
               hidden: menu.visible === Visible.HIDDEN,
-              permissions: menu.perms ? [menu.perms] : []
-            }
+              permissions: menu.perms ? [menu.perms] : [],
+            },
           }
 
           // 递归处理子菜单
           if (menu.children && menu.children.length > 0) {
-            (route as any).children = generateRoutesFromMenus(menu.children, true)
+            ;(route as any).children = generateRoutesFromMenus(menu.children, true)
           }
 
           routes.push(route)
@@ -91,18 +104,18 @@ export const usePermissionStore = defineStore('permission', () => {
             const route: RouteRecordRaw = {
               path: menu.path || '',
               name: menu.menuName,
-              component: () => import('@/layouts/DefaultLayout.vue'),
+              component: () => import('@/layouts/Layout.vue'),
               meta: {
                 title: menu.menuName,
                 icon: menu.icon,
                 hidden: menu.visible === Visible.HIDDEN,
-                permissions: menu.perms ? [menu.perms] : []
-              }
+                permissions: menu.perms ? [menu.perms] : [],
+              },
             }
 
             // 递归处理子菜单
             if (menu.children && menu.children.length > 0) {
-              (route as any).children = generateRoutesFromMenus(menu.children, true)
+              ;(route as any).children = generateRoutesFromMenus(menu.children, true)
             }
 
             routes.push(route)
@@ -110,20 +123,20 @@ export const usePermissionStore = defineStore('permission', () => {
             // 单页面，Layout + 单个子路由
             const route: RouteRecordRaw = {
               path: menu.path || '',
-              component: () => import('@/layouts/DefaultLayout.vue'),
+              component: () => import('@/layouts/Layout.vue'),
               children: [
                 {
                   path: '',
                   name: menu.menuName,
-                  component: loadComponent(menu.component),
+                  component: loadComponent(menu.component!),
                   meta: {
                     title: menu.menuName,
                     icon: menu.icon,
                     hidden: menu.visible === Visible.HIDDEN,
-                    permissions: menu.perms ? [menu.perms] : []
-                  }
-                }
-              ]
+                    permissions: menu.perms ? [menu.perms] : [],
+                  },
+                },
+              ],
             }
 
             routes.push(route)
@@ -139,7 +152,6 @@ export const usePermissionStore = defineStore('permission', () => {
 
     return routes
   }
-
 
   /**
    * 重置状态
@@ -157,7 +169,6 @@ export const usePermissionStore = defineStore('permission', () => {
     permissions,
     isRoutesGenerated,
     generateRoutes,
-    resetState
+    resetState,
   }
 })
-

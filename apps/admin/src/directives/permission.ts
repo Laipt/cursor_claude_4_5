@@ -1,6 +1,6 @@
 // 权限指令
 
-import { Directive, DirectiveBinding } from 'vue'
+import type { Directive, DirectiveBinding } from 'vue'
 import { hasPermission } from '@/utils/permission'
 
 /**

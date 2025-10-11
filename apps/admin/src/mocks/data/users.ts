@@ -1,6 +1,6 @@
 // 用户 Mock 数据
 
-import type { User } from '@/types/user'
+import type { User } from '@kk/shared'
 
 export const users: User[] = [
   {

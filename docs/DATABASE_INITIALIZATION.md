@@ -183,7 +183,7 @@ const statusDict = await prisma.dictData.findMany({
 
 ```vue
 <script setup lang="ts">
-import { DictTypes } from '@admin-system/shared'
+import { DictTypes } from '@kk/shared'
 import { useDict } from '@/composables/useDict'
 
 // 使用用户状态字典

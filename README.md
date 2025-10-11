@@ -35,7 +35,7 @@ admin-system/
 - **TypeScript** - 类型安全
 
 ### 共享
-- **@admin-system/shared** - 共享类型定义包
+- **@kk/shared** - 共享类型定义包
 
 ## 功能特性
 
@@ -136,14 +136,14 @@ pnpm dev:admin
 
 ### 类型共享
 
-前后端通过 `@admin-system/shared` 包共享类型定义：
+前后端通过 `@kk/shared` 包共享类型定义：
 
 ```typescript
 // 后端使用
-import { User, PageResult } from '@admin-system/shared';
+import { User, PageResult } from '@kk/shared';
 
 // 前端也可以使用（需配置）
-import { User, PageResult } from '@admin-system/shared';
+import { User, PageResult } from '@kk/shared';
 ```
 
 ### 权限系统
@@ -308,7 +308,7 @@ export interface YourData {
 ```typescript
 // apps/admin/src/api/your-module.ts
 import request from '@/utils/request';
-import { YourData } from '@admin-system/shared';
+import { YourData } from '@kk/shared';
 
 export function getData(): Promise<YourData[]> {
   return request({ url: '/your-module', method: 'get' });

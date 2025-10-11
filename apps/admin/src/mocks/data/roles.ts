@@ -1,6 +1,6 @@
 // 角色 Mock 数据
 
-import type { Role } from '@/types/role'
+import type { Role } from '@kk/shared'
 
 export const roles: Role[] = [
   {

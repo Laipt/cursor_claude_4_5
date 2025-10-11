@@ -2,7 +2,7 @@ import { Injectable, BadRequestException, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto, UpdateUserDto, UserQueryDto, ResetPasswordDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
-import { User, PageResult } from '@admin-system/shared';
+import { User, PageResult } from '@kk/shared';
 
 @Injectable()
 export class UserService {

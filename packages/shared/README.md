@@ -1,4 +1,4 @@
-# @admin-system/shared
+# @kk/shared
 
 统一的类型定义和常量，用于前后端共享。
 
@@ -13,7 +13,7 @@
 
 ```bash
 # 在前端或后端项目中引用
-pnpm add @admin-system/shared@workspace:*
+pnpm add @kk/shared@workspace:*
 ```
 
 ## 使用示例
@@ -21,7 +21,7 @@ pnpm add @admin-system/shared@workspace:*
 ### 1. 状态常量
 
 ```typescript
-import { Status, StatusLabel, getStatusLabel, getStatusTagType } from '@admin-system/shared'
+import { Status, StatusLabel, getStatusLabel, getStatusTagType } from '@kk/shared'
 
 // 使用常量
 const userStatus = Status.NORMAL  // 1
@@ -40,7 +40,7 @@ console.log(StatusLabel[Status.NORMAL])  // "正常"
 ### 2. 菜单类型常量
 
 ```typescript
-import { MenuTypeValue, MenuTypeLabel, getMenuTypeLabel } from '@admin-system/shared'
+import { MenuTypeValue, MenuTypeLabel, getMenuTypeLabel } from '@kk/shared'
 
 // 菜单类型
 const menuType = MenuTypeValue.MENU  // "C"
@@ -54,7 +54,7 @@ const label = getMenuTypeLabel(MenuTypeValue.MENU)  // "菜单"
 ### 3. 可见性常量
 
 ```typescript
-import { Visible, VisibleLabel, isVisible } from '@admin-system/shared'
+import { Visible, VisibleLabel, isVisible } from '@kk/shared'
 
 // 使用常量
 const visibility = Visible.VISIBLE  // 1
@@ -76,7 +76,7 @@ if (isVisible(menu.visible)) {
 </template>
 
 <script setup lang="ts">
-import { User, Status, getStatusLabel, getStatusTagType } from '@admin-system/shared'
+import { User, Status, getStatusLabel, getStatusTagType } from '@kk/shared'
 
 const user: User = {
   userId: 1,
@@ -91,7 +91,7 @@ const user: User = {
 
 ```typescript
 import { Injectable } from '@nestjs/common'
-import { Status, MenuTypeValue } from '@admin-system/shared'
+import { Status, MenuTypeValue } from '@kk/shared'
 
 @Injectable()
 export class UserService {
@@ -213,7 +213,7 @@ pnpm build:esm
 
 3. **类型导入**：同时导入类型和常量
    ```typescript
-   import { User, Status } from '@admin-system/shared'
+   import { User, Status } from '@kk/shared'
    ```
 
 ## 许可证

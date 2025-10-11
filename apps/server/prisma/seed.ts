@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { Status, Visible, MenuTypeValue, IsDefault } from '@admin-system/shared';
+import { Status, Visible, MenuTypeValue, IsDefault } from '@kk/shared';
 
 const prisma = new PrismaClient();
 

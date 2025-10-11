@@ -2,7 +2,6 @@
 
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { RouteLocationNormalized } from 'vue-router'
 
 export interface TagView {
   title?: string
@@ -14,6 +13,7 @@ export interface TagView {
 export const useAppStore = defineStore(
   'app',
   () => {
+    const showSidebar = ref(true)
     // 侧边栏折叠状态
     const sidebarCollapsed = ref(false)
 
@@ -105,7 +105,7 @@ export const useAppStore = defineStore(
         const index = cachedViews.value.indexOf(name)
         if (index !== -1) {
           cachedViews.value.splice(index, 1)
-          
+
           // 延迟后重新添加到缓存
           setTimeout(() => {
             cachedViews.value.push(name)
@@ -124,6 +124,7 @@ export const useAppStore = defineStore(
     }
 
     return {
+      showSidebar,
       sidebarCollapsed,
       tagsViewList,
       cachedViews,

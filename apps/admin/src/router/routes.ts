@@ -1,6 +1,6 @@
 // 静态路由配置
 
-import { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
 
 export const constantRoutes: RouteRecordRaw[] = [
   {
@@ -14,7 +14,7 @@ export const constantRoutes: RouteRecordRaw[] = [
   },
   {
     path: '/',
-    component: () => import('@/layouts/DefaultLayout.vue'),
+    component: () => import('@/layouts/Layout.vue'),
     redirect: '/home',
     children: [
       {
@@ -32,7 +32,7 @@ export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('@/views/404.vue'),
+    component: () => import('@/views/error/404.vue'),
     meta: {
       title: '404',
       hidden: true

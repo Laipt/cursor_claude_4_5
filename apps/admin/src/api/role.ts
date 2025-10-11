@@ -1,8 +1,8 @@
 // 角色API
 
 import request from '@/utils/request'
-import { Role, RoleQuery, RoleForm } from '@/types/role'
-import { PageResult } from '@/types/common'
+import type { Role, RoleQuery, RoleForm, PageResult } from '@kk/shared'
+import { toastSuccess } from './common'
 
 /**
  * 角色列表
@@ -11,7 +11,7 @@ export function getRoleList(params: RoleQuery): Promise<PageResult<Role>> {
   return request({
     url: '/role/list',
     method: 'get',
-    params
+    params,
   })
 }
 
@@ -21,7 +21,7 @@ export function getRoleList(params: RoleQuery): Promise<PageResult<Role>> {
 export function getAllRoles(): Promise<Role[]> {
   return request({
     url: '/role/all',
-    method: 'get'
+    method: 'get',
   })
 }
 
@@ -31,7 +31,7 @@ export function getAllRoles(): Promise<Role[]> {
 export function getRole(roleId: number): Promise<Role> {
   return request({
     url: `/role/${roleId}`,
-    method: 'get'
+    method: 'get',
   })
 }
 
@@ -42,19 +42,23 @@ export function addRole(data: RoleForm): Promise<Role> {
   return request({
     url: '/role',
     method: 'post',
-    data
+    data,
   })
 }
 
 /**
  * 更新角色
  */
-export function updateRole(roleId: number, data: RoleForm): Promise<Role> {
-  return request({
-    url: `/role/${roleId}`,
-    method: 'put',
-    data
-  })
+export function updateRole({ roleId, ...data }): Promise<Role> {
+  return (
+    roleId
+      ? request({
+          url: `/role/${roleId}`,
+          method: 'put',
+          data,
+        })
+      : addRole(data as any)
+  ).then(toastSuccess)
 }
 
 /**
@@ -63,7 +67,6 @@ export function updateRole(roleId: number, data: RoleForm): Promise<Role> {
 export function deleteRole(roleId: number): Promise<void> {
   return request({
     url: `/role/${roleId}`,
-    method: 'delete'
-  })
+    method: 'delete',
+  }).then(toastSuccess)
 }
-

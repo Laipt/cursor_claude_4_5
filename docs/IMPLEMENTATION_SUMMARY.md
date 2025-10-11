@@ -217,7 +217,7 @@ export function getDictDataByType(dictType: string): Promise<DictData[]> {
 ### 基础使用
 ```vue
 <script setup lang="ts">
-import { DictTypes } from '@admin-system/shared'
+import { DictTypes } from '@kk/shared'
 import { useDict } from '@/composables/useDict'
 
 // 使用字典
@@ -246,7 +246,7 @@ const statusDict = useDict(DictTypes.USER_STATUS)
 ```vue
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { DictTypes } from '@admin-system/shared'
+import { DictTypes } from '@kk/shared'
 import { useDicts } from '@/composables/useDict'
 
 const { loadDicts } = useDicts()

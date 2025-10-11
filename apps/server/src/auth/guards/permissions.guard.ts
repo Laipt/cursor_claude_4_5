@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@
 import { Reflector } from '@nestjs/core';
 import { PERMISSIONS_KEY } from '../../common/decorators/permissions.decorator';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Status } from '@admin-system/shared';
+import { Status } from '@kk/shared';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {

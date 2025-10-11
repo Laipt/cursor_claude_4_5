@@ -1,10 +1,13 @@
-<template>
-  <router-view />
-</template>
-
 <script setup lang="ts">
-// 后台管理系统主入口
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 </script>
+
+<template>
+  <el-config-provider :locale="zhCn">
+    <router-view />
+  </el-config-provider>
+</template>
 
 <style>
 * {
@@ -12,13 +15,10 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
+html,
+body,
 #app {
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 </style>

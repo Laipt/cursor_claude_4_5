@@ -1,8 +1,7 @@
 // 认证API
 
 import request from '@/utils/request'
-import { LoginForm, LoginResult } from '@/types/common'
-import { User } from '@/types/user'
+import type { LoginForm, LoginResult, User } from '@kk/shared'
 
 /**
  * 登录
@@ -11,7 +10,7 @@ export function login(data: LoginForm): Promise<LoginResult> {
   return request({
     url: '/auth/login',
     method: 'post',
-    data
+    data,
   })
 }
 
@@ -21,7 +20,7 @@ export function login(data: LoginForm): Promise<LoginResult> {
 export function getUserInfo(): Promise<User> {
   return request({
     url: '/auth/userinfo',
-    method: 'get'
+    method: 'get',
   })
 }
 
@@ -31,7 +30,6 @@ export function getUserInfo(): Promise<User> {
 export function logout(): Promise<void> {
   return request({
     url: '/auth/logout',
-    method: 'post'
+    method: 'post',
   })
 }
-

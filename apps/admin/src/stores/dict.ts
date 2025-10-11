@@ -1,7 +1,7 @@
 // 字典数据管理
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { DictData } from '@admin-system/shared'
+import type { DictData } from '@kk/shared'
 import { getDictDataByType } from '@/api/dict'
 
 export const useDictStore = defineStore('dict', () => {

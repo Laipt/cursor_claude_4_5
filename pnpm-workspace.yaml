@@ -1,4 +1,13 @@
 packages:
-  - 'apps/*'
-  - 'packages/*'
-
+  - apps/*
+  - packages/*
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@parcel/watcher'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - bcrypt
+  - esbuild
+  - msw
+  - prisma
+  - vue-demi

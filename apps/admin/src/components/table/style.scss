@@ -1,0 +1,31 @@
+.kk-table-header {
+  display: flex;
+  &__form {
+    flex: 1 0 0;
+  }
+}
+
+.kk-pagination {
+  position: relative;
+  background-color: #fff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  .el-pagination {
+    flex: 1;
+    width: 0;
+  }
+}
+
+.kk-table-actions {
+  padding-bottom: 10px;
+}
+
+.kk-operations {
+  display: flex;
+  gap: 4px;
+  flex-flow: row wrap;
+  .el-button + .el-button {
+    margin-left: 0;
+  }
+}

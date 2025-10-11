@@ -106,7 +106,7 @@ async getDictDataByType(dictType: string): Promise<DictData[]> {
 ```typescript
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import type { DictData } from '@admin-system/shared'
+import type { DictData } from '@kk/shared'
 import { getDictDataByType } from '@/api/dict'
 
 export const useDictStore = defineStore('dict', () => {
@@ -161,7 +161,7 @@ export const useDictStore = defineStore('dict', () => {
 ```typescript
 import { ref, computed } from 'vue'
 import { useDictStore } from '@/stores/dict'
-import type { DictData } from '@admin-system/shared'
+import type { DictData } from '@kk/shared'
 
 /**
  * 使用字典
@@ -241,7 +241,7 @@ export function useDict(dictType: string) {
 </template>
 
 <script setup lang="ts">
-import { DictTypes } from '@admin-system/shared'
+import { DictTypes } from '@kk/shared'
 import { useDict } from '@/composables/useDict'
 
 // 使用字典
@@ -424,7 +424,7 @@ const label = statusDict.getLabel(1) // 返回 "正常"
 </template>
 
 <script setup lang="ts">
-import { Status, StatusLabel, StatusTagType } from '@admin-system/shared'
+import { Status, StatusLabel, StatusTagType } from '@kk/shared'
 </script>
 ```
 
@@ -437,7 +437,7 @@ import { Status, StatusLabel, StatusTagType } from '@admin-system/shared'
 </template>
 
 <script setup lang="ts">
-import { DictTypes } from '@admin-system/shared'
+import { DictTypes } from '@kk/shared'
 import { useDict } from '@/composables/useDict'
 
 const statusDict = useDict(DictTypes.USER_STATUS)
