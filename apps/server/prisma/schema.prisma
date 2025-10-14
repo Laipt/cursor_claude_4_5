@@ -137,3 +137,353 @@ model RoleMenu {
   @@map("sys_role_menu")
 }
 
+// ==================== 电商模块 ====================
+
+// App用户表
+model AppUser {
+  uid               Int       @id @default(autoincrement())
+  account           String    @default("") @db.VarChar(32)
+  pwd               String    @default("") @db.VarChar(32)
+  realName          String    @default("") @map("real_name") @db.VarChar(25)
+  birthday          String    @default("") @db.VarChar(32)
+  cardId            String    @default("") @map("card_id") @db.VarChar(20)
+  mark              String    @default("") @db.VarChar(255)
+  partnerId         Int?      @map("partner_id")
+  groupId           String    @default("") @map("group_id") @db.VarChar(255)
+  tagId             String    @default("") @map("tag_id") @db.VarChar(255)
+  nickname          String    @default("") @db.VarChar(255)
+  avatar            String    @default("") @db.VarChar(256)
+  phone             String?   @db.Char(15)
+  addIp             String    @default("") @map("add_ip") @db.VarChar(16)
+  lastIp            String    @default("") @map("last_ip") @db.VarChar(16)
+  nowMoney          Decimal   @default(0.00) @map("now_money") @db.Decimal(16, 2)
+  brokeragePrice    Decimal   @default(0.00) @map("brokerage_price") @db.Decimal(8, 2)
+  integral          Int       @default(0)
+  experience        Int       @default(0)
+  signNum           Int       @default(0) @map("sign_num")
+  status            Int       @default(1) @db.TinyInt
+  level             Int       @default(0) @db.TinyInt
+  spreadUid         Int       @default(0) @map("spread_uid")
+  spreadTime        DateTime? @map("spread_time")
+  userType          String    @default("") @map("user_type") @db.VarChar(32)
+  isPromoter        Int       @default(0) @map("is_promoter") @db.TinyInt
+  payCount          Int       @default(0) @map("pay_count")
+  spreadCount       Int       @default(0) @map("spread_count")
+  addres            String    @default("") @db.VarChar(255)
+  adminid           Int       @default(0)
+  loginType         String    @default("") @map("login_type") @db.VarChar(36)
+  createTime        DateTime  @default(now()) @map("create_time")
+  updateTime        DateTime  @updatedAt @map("update_time")
+  lastLoginTime     DateTime? @map("last_login_time")
+  cleanTime         DateTime? @map("clean_time")
+  path              String    @default("/0/") @db.VarChar(255)
+  subscribe         Int       @default(0) @db.TinyInt
+  subscribeTime     DateTime? @map("subscribe_time")
+  sex               Int       @default(1) @db.TinyInt
+  country           String    @default("CN") @db.VarChar(20)
+  promoterTime      DateTime? @map("promoter_time")
+  isLogoff          Int       @default(0) @map("is_logoff") @db.TinyInt
+  logoffTime        DateTime? @map("logoff_time")
+
+  orders            Order[]
+  
+  @@index([spreadUid])
+  @@index([level])
+  @@index([status])
+  @@index([isPromoter])
+  @@map("eb_user")
+}
+
+// 用户标签表
+model UserTag {
+  id         Int      @id @default(autoincrement())
+  tagName    String   @map("tag_name") @db.VarChar(30)
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  
+  @@map("eb_user_tag")
+}
+
+// 用户等级表
+model UserLevel {
+  id         Int      @id @default(autoincrement())
+  level      Int      @unique // 等级值
+  name       String   @db.VarChar(50) // 等级名称
+  discount   Int      @default(100) // 折扣，100表示无折扣
+  isShow     Int      @default(1) @map("is_show") @db.TinyInt // 是否显示
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  
+  @@map("eb_user_level")
+}
+
+// 用户分组表
+model UserGroup {
+  id         Int      @id @default(autoincrement())
+  groupName  String   @map("group_name") @db.VarChar(50)
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  
+  @@map("eb_user_group")
+}
+
+// 商品分类表
+model Category {
+  id         Int      @id @default(autoincrement())
+  pid        Int      @default(0)
+  path       String   @default("/0/") @db.VarChar(255)
+  name       String   @db.VarChar(50)
+  type       Int      @default(1) @db.SmallInt // 1=商品分类
+  url        String   @default("") @db.VarChar(255)
+  extra      String?  @db.Text
+  status     Int      @default(1) @db.TinyInt
+  sort       Int      @default(99999)
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @updatedAt @map("update_time")
+  
+  @@index([pid, status])
+  @@index([path])
+  @@map("eb_category")
+}
+
+// 商品表
+model Product {
+  id             Int      @id @default(autoincrement()) @db.MediumInt
+  merId          Int      @default(0) @map("mer_id")
+  image          String   @db.VarChar(256)
+  sliderImage    String   @map("slider_image") @db.VarChar(2000)
+  storeName      String   @map("store_name") @db.VarChar(128)
+  storeInfo      String   @map("store_info") @db.VarChar(256)
+  keyword        String   @db.VarChar(256)
+  barCode        String   @default("") @map("bar_code") @db.VarChar(15)
+  cateId         String   @map("cate_id") @db.VarChar(64)
+  price          Decimal  @default(0.00) @db.Decimal(8, 2)
+  vipPrice       Decimal  @default(0.00) @map("vip_price") @db.Decimal(8, 2)
+  otPrice        Decimal  @default(0.00) @map("ot_price") @db.Decimal(8, 2)
+  postage        Decimal  @default(0.00) @db.Decimal(8, 2)
+  unitName       String   @map("unit_name") @db.VarChar(32)
+  sort           Int      @default(0) @db.SmallInt
+  sales          Int      @default(0) @db.MediumInt
+  stock          Int      @default(0) @db.MediumInt
+  isShow         Int      @default(1) @map("is_show") @db.TinyInt
+  isHot          Int      @default(0) @map("is_hot") @db.TinyInt
+  isBenefit      Int      @default(0) @map("is_benefit") @db.TinyInt
+  isBest         Int      @default(0) @map("is_best") @db.TinyInt
+  isNew          Int      @default(0) @map("is_new") @db.TinyInt
+  addTime        Int      @map("add_time")
+  isPostage      Int      @default(0) @map("is_postage") @db.TinyInt
+  isDel          Int      @default(0) @map("is_del") @db.TinyInt
+  merUse         Int      @default(0) @map("mer_use") @db.TinyInt
+  giveIntegral   Int      @default(0) @map("give_integral")
+  cost           Decimal  @default(0.00) @db.Decimal(8, 2)
+  isSeckill      Int      @default(0) @map("is_seckill") @db.TinyInt
+  isBargain      Int?     @map("is_bargain") @db.TinyInt
+  isGood         Int      @default(0) @map("is_good") @db.TinyInt
+  isSub          Int      @default(0) @map("is_sub") @db.TinyInt
+  ficti          Int      @default(100) @db.MediumInt
+  browse         Int      @default(0)
+  codePath       String   @default("") @map("code_path") @db.VarChar(64)
+  soureLink      String   @default("") @map("soure_link") @db.VarChar(255)
+  videoLink      String   @default("") @map("video_link") @db.VarChar(200)
+  tempId         Int      @default(1) @map("temp_id")
+  specType       Int      @default(0) @map("spec_type") @db.TinyInt
+  activity       String   @default("") @db.VarChar(255)
+  flatPattern    String   @default("") @map("flat_pattern") @db.VarChar(1000)
+  isRecycle      Int      @default(0) @map("is_recycle") @db.TinyInt
+  version        Int      @default(0)
+  
+  attrs          ProductAttr[]
+  attrValues     ProductAttrValue[]
+  replies        ProductReply[]
+  orderInfos     OrderInfo[]
+  
+  @@index([cateId])
+  @@index([isHot])
+  @@index([isBenefit])
+  @@index([isBest])
+  @@index([isNew])
+  @@index([isDel])
+  @@map("eb_store_product")
+}
+
+// 商品属性表
+model ProductAttr {
+  id         Int      @id @default(autoincrement()) @db.MediumInt
+  productId  Int      @default(0) @map("product_id") @db.MediumInt
+  attrName   String   @map("attr_name") @db.VarChar(32)
+  attrValues String   @map("attr_values") @db.VarChar(1000)
+  type       Int      @default(0) @db.TinyInt
+  isDel      Int      @default(0) @map("is_del") @db.TinyInt
+  
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@index([productId])
+  @@map("eb_store_product_attr")
+}
+
+// 商品属性值/SKU表
+model ProductAttrValue {
+  id           Int      @id @default(autoincrement()) @db.MediumInt
+  productId    Int      @map("product_id") @db.MediumInt
+  suk          String   @db.VarChar(128)
+  stock        Int
+  sales        Int      @default(0)
+  price        Decimal  @db.Decimal(8, 2)
+  image        String?  @db.VarChar(1000)
+  unique       String   @default("") @db.Char(8)
+  cost         Decimal  @default(0.00) @db.Decimal(8, 2)
+  barCode      String   @default("") @map("bar_code") @db.VarChar(50)
+  otPrice      Decimal  @default(0.00) @map("ot_price") @db.Decimal(8, 2)
+  weight       Decimal  @default(0.00) @db.Decimal(8, 2)
+  volume       Decimal  @default(0.00) @db.Decimal(8, 2)
+  brokerage    Decimal  @default(0.00) @db.Decimal(8, 2)
+  brokerageTwo Decimal  @default(0.00) @map("brokerage_two") @db.Decimal(8, 2)
+  type         Int      @default(0) @db.TinyInt
+  quota        Int?
+  quotaShow    Int?     @map("quota_show")
+  attrValue    String?  @map("attr_value") @db.Text
+  isDel        Int      @default(0) @map("is_del") @db.TinyInt
+  version      Int      @default(0)
+  
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@index([unique, suk])
+  @@index([productId, suk])
+  @@map("eb_store_product_attr_value")
+}
+
+// 商品评论表
+model ProductReply {
+  id          Int      @id @default(autoincrement())
+  uid         Int
+  oid         Int
+  productId   Int      @map("product_id") @db.MediumInt
+  replyType   String   @default("product") @map("reply_type") @db.VarChar(32)
+  productScore Int     @default(5) @map("product_score") @db.TinyInt
+  serviceScore Int     @default(5) @map("service_score") @db.TinyInt
+  comment     String   @db.VarChar(512)
+  pics        String   @default("") @db.VarChar(1000)
+  createTime  DateTime @default(now()) @map("create_time")
+  merchantReplyContent String? @map("merchant_reply_content") @db.VarChar(512)
+  merchantReplyTime DateTime? @map("merchant_reply_time")
+  isDel       Int      @default(0) @map("is_del") @db.TinyInt
+  isReply     Int      @default(0) @map("is_reply") @db.TinyInt
+  
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@index([productId])
+  @@index([uid])
+  @@map("eb_store_product_reply")
+}
+
+// 订单表
+model Order {
+  id                    Int       @id @default(autoincrement())
+  orderId               String    @map("order_id") @db.VarChar(32)
+  uid                   Int
+  realName              String    @map("real_name") @db.VarChar(32)
+  userPhone             String    @map("user_phone") @db.VarChar(18)
+  userAddress           String    @map("user_address") @db.VarChar(100)
+  freightPrice          Decimal   @default(0.00) @map("freight_price") @db.Decimal(8, 2)
+  totalNum              Int       @default(0) @map("total_num")
+  totalPrice            Decimal   @default(0.00) @map("total_price") @db.Decimal(8, 2)
+  totalPostage          Decimal   @default(0.00) @map("total_postage") @db.Decimal(8, 2)
+  payPrice              Decimal   @default(0.00) @map("pay_price") @db.Decimal(8, 2)
+  payPostage            Decimal   @default(0.00) @map("pay_postage") @db.Decimal(8, 2)
+  deductionPrice        Decimal   @default(0.00) @map("deduction_price") @db.Decimal(8, 2)
+  couponId              Int       @default(0) @map("coupon_id")
+  couponPrice           Decimal   @default(0.00) @map("coupon_price") @db.Decimal(8, 2)
+  paid                  Int       @default(0) @db.TinyInt
+  payTime               DateTime? @map("pay_time")
+  payType               String    @default("") @map("pay_type") @db.VarChar(32)
+  createTime            DateTime  @default(now()) @map("create_time")
+  status                Int       @default(0) @db.TinyInt
+  refundStatus          Int       @default(0) @map("refund_status") @db.TinyInt
+  refundReasonWapImg    String?   @map("refund_reason_wap_img") @db.VarChar(5000)
+  refundReasonWapExplain String?  @map("refund_reason_wap_explain") @db.VarChar(255)
+  refundReasonWap       String?   @map("refund_reason_wap") @db.VarChar(255)
+  refundReason          String?   @map("refund_reason") @db.VarChar(255)
+  refundReasonTime      DateTime? @map("refund_reason_time")
+  refundPrice           Decimal   @default(0.00) @map("refund_price") @db.Decimal(8, 2)
+  deliveryName          String?   @map("delivery_name") @db.VarChar(64)
+  deliveryType          String?   @map("delivery_type") @db.VarChar(32)
+  deliveryId            String?   @map("delivery_id") @db.VarChar(64)
+  gainIntegral          Int       @default(0) @map("gain_integral")
+  useIntegral           Int       @default(0) @map("use_integral")
+  backIntegral          Int       @default(0) @map("back_integral")
+  mark                  String    @db.VarChar(512)
+  isDel                 Int       @default(0) @map("is_del") @db.TinyInt
+  remark                String?   @db.VarChar(512)
+  merId                 Int       @default(0) @map("mer_id")
+  isMerCheck            Int       @default(0) @map("is_mer_check") @db.TinyInt
+  combinationId         Int       @default(0) @map("combination_id")
+  pinkId                Int       @default(0) @map("pink_id")
+  cost                  Decimal   @map("cost") @db.Decimal(8, 2)
+  seckillId             Int       @default(0) @map("seckill_id")
+  bargainId             Int       @default(0) @map("bargain_id")
+  verifyCode            String    @default("") @map("verify_code") @db.VarChar(12)
+  storeId               Int       @default(0) @map("store_id")
+  shippingType          Int       @default(1) @map("shipping_type") @db.TinyInt
+  clerkId               Int       @default(0) @map("clerk_id")
+  isChannel             Int       @default(0) @map("is_channel") @db.TinyInt
+  isRemind              Int       @default(0) @map("is_remind") @db.TinyInt
+  isSystemDel           Int       @default(0) @map("is_system_del") @db.TinyInt
+  
+  user                  AppUser   @relation(fields: [uid], references: [uid], onDelete: Cascade)
+  orderInfos            OrderInfo[]
+  orderStatus           OrderStatus[]
+  
+  @@index([uid])
+  @@index([orderId])
+  @@index([status])
+  @@index([paid])
+  @@map("eb_store_order")
+}
+
+// 订单商品详情表
+model OrderInfo {
+  id            Int      @id @default(autoincrement())
+  orderId       Int      @map("order_id")
+  productId     Int      @default(0) @map("product_id") @db.MediumInt
+  info          String   @db.Text
+  unique        String   @db.Char(32)
+  createTime    DateTime @default(now()) @map("create_time")
+  updateTime    DateTime @default(now()) @map("update_time")
+  orderNo       String   @map("order_no") @db.VarChar(32)
+  productName   String   @map("product_name") @db.VarChar(128)
+  attrValueId   Int?     @map("attr_value_id")
+  image         String   @db.VarChar(256)
+  sku           String   @db.VarChar(128)
+  price         Decimal  @db.Decimal(8, 2)
+  payNum        Int      @default(0) @map("pay_num")
+  weight        Decimal  @db.Decimal(8, 2)
+  volume        Decimal  @db.Decimal(8, 2)
+  giveIntegral  Int      @map("give_integral")
+  isReply       Int      @default(0) @map("is_reply") @db.TinyInt
+  isSub         Int      @default(0) @map("is_sub") @db.TinyInt
+  vipPrice      Decimal  @map("vip_price") @db.Decimal(8, 2)
+  productType   Int      @default(0) @map("product_type")
+  
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@unique([orderId, unique])
+  @@index([productId])
+  @@map("eb_store_order_info")
+}
+
+// 订单操作记录表
+model OrderStatus {
+  id            Int      @id @default(autoincrement())
+  oid           Int
+  changeType    String   @map("change_type") @db.VarChar(32)
+  changeMessage String   @map("change_message") @db.VarChar(256)
+  createTime    DateTime @default(now()) @map("create_time")
+  
+  order         Order    @relation(fields: [oid], references: [id], onDelete: Cascade)
+  
+  @@index([oid])
+  @@index([changeType])
+  @@map("eb_store_order_status")
+}
+

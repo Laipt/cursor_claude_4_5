@@ -92,6 +92,26 @@ export const DictTypes = {
   YES_NO: 'sys_yes_no',
   /** 菜单可见性 */
   MENU_VISIBLE: 'sys_menu_visible',
+  
+  // ==================== 电商模块字典 ====================
+  /** App用户状态 */
+  APP_USER_STATUS: 'app_user_status',
+  /** 商品状态 */
+  PRODUCT_STATUS: 'product_status',
+  /** 订单状态 */
+  ORDER_STATUS: 'order_status',
+  /** 支付状态 */
+  PAY_STATUS: 'pay_status',
+  /** 发货状态 */
+  DELIVERY_STATUS: 'delivery_status',
+  /** 退款状态 */
+  REFUND_STATUS: 'refund_status',
+  /** 余额调整类型 */
+  BALANCE_TYPE: 'balance_type',
+  /** 余额调整操作 */
+  BALANCE_ACTION: 'balance_action',
+  /** 评论评分 */
+  REPLY_SCORE: 'reply_score',
 } as const
 
 /**
@@ -129,4 +149,114 @@ export const isNormalStatus = (status: number): boolean => {
 export const isVisible = (visible: number): boolean => {
   return visible === Visible.VISIBLE
 }
+
+// ==================== 电商模块常量 ====================
+
+/**
+ * App用户状态
+ */
+export const AppUserStatus = {
+  /** 禁用 */
+  DISABLED: 0,
+  /** 正常 */
+  NORMAL: 1,
+} as const
+
+export type AppUserStatusValue = typeof AppUserStatus[keyof typeof AppUserStatus]
+
+/**
+ * 商品状态（上下架）
+ */
+export const ProductStatus = {
+  /** 下架 */
+  OFF_SHELF: 0,
+  /** 上架 */
+  ON_SHELF: 1,
+} as const
+
+export type ProductStatusValue = typeof ProductStatus[keyof typeof ProductStatus]
+
+/**
+ * 订单状态常量
+ */
+export const OrderStatusConst = {
+  /** 待发货 */
+  PENDING_DELIVERY: 0,
+  /** 待收货 */
+  PENDING_RECEIPT: 1,
+  /** 待评价 */
+  PENDING_REVIEW: 2,
+  /** 已完成 */
+  COMPLETED: 3,
+  /** 已退款 */
+  REFUNDED: -1,
+} as const
+
+export type OrderStatusConstValue = typeof OrderStatusConst[keyof typeof OrderStatusConst]
+
+/**
+ * 支付状态
+ */
+export const PayStatus = {
+  /** 未支付 */
+  UNPAID: 0,
+  /** 已支付 */
+  PAID: 1,
+} as const
+
+export type PayStatusValue = typeof PayStatus[keyof typeof PayStatus]
+
+/**
+ * 退款状态
+ */
+export const RefundStatus = {
+  /** 无退款 */
+  NONE: 0,
+  /** 申请中 */
+  APPLYING: 1,
+  /** 已退款 */
+  REFUNDED: 2,
+  /** 已拒绝 */
+  REJECTED: 3,
+} as const
+
+export type RefundStatusValue = typeof RefundStatus[keyof typeof RefundStatus]
+
+/**
+ * 余额调整类型
+ */
+export const BalanceType = {
+  /** 余额 */
+  MONEY: 'money',
+  /** 积分 */
+  INTEGRAL: 'integral',
+} as const
+
+export type BalanceTypeValue = typeof BalanceType[keyof typeof BalanceType]
+
+/**
+ * 余额调整操作
+ */
+export const BalanceAction = {
+  /** 增加 */
+  ADD: 'add',
+  /** 减少 */
+  SUBTRACT: 'subtract',
+} as const
+
+export type BalanceActionValue = typeof BalanceAction[keyof typeof BalanceAction]
+
+/**
+ * 发货类型
+ */
+export const DeliveryType = {
+  /** 快递 */
+  EXPRESS: 'express',
+  /** 送货上门 */
+  HOME_DELIVERY: 'home',
+  /** 到店自提 */
+  SELF_PICKUP: 'pickup',
+} as const
+
+export type DeliveryTypeValue = typeof DeliveryType[keyof typeof DeliveryType]
 
