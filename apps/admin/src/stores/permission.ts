@@ -66,6 +66,14 @@ export const usePermissionStore = defineStore('permission', () => {
   function generateRoutesFromMenus(menus: Menu[], isChild: boolean = false): any[] {
     const routes: any[] = []
 
+    const getComponentName = (menu: Menu) => {
+      if (menu.component) {
+        return menu.component.slice(1).replace('/', '_')
+      } else {
+        return menu.path?.slice(1).replace('/', '_') ?? ''
+      }
+    }
+
     menus.forEach((menu) => {
       // 只处理菜单类型，忽略按钮
       if (menu.menuType === MenuTypeValue.MENU || menu.menuType === MenuTypeValue.DIRECTORY) {
@@ -81,7 +89,7 @@ export const usePermissionStore = defineStore('permission', () => {
 
           const route: RouteRecordRaw = {
             path: childPath,
-            name: menu.menuName,
+            name: getComponentName(menu),
             component: loadComponent(menu.component!),
             meta: {
               title: menu.menuName,
@@ -103,7 +111,7 @@ export const usePermissionStore = defineStore('permission', () => {
             // 目录类型，Layout + children
             const route: RouteRecordRaw = {
               path: menu.path || '',
-              name: menu.menuName,
+              name: getComponentName(menu),
               component: () => import('@/layouts/Layout.vue'),
               meta: {
                 title: menu.menuName,
@@ -127,7 +135,7 @@ export const usePermissionStore = defineStore('permission', () => {
               children: [
                 {
                   path: '',
-                  name: menu.menuName,
+                  name: getComponentName(menu),
                   component: loadComponent(menu.component!),
                   meta: {
                     title: menu.menuName,
